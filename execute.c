@@ -29,7 +29,7 @@ void execute(char **arr, char **av)
  *
  * Return: number reaeed
  */
-ssize_t _getline(char **lineptr, ssize_t *n, FILE *stream)
+ssize_t _getline(char **lineptr, ssize_t *n, int stream)
 {
 	ssize_t nread = 0;
 	char *temp, *new_buff;
@@ -38,7 +38,7 @@ ssize_t _getline(char **lineptr, ssize_t *n, FILE *stream)
 	if (!temp)
 		return (-1);
 
-	while ((nread += read(fileno(stream), temp + nread, BUFFER)) > 0)
+	while ((nread += read(stream, temp + nread, BUFFER)) > 0)
 	{
 		if (*n < nread + BUFFER)
 		{
