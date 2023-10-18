@@ -13,7 +13,7 @@
 
 
 char **make_array(char *str);
-ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
+ssize_t _getline(char **lineptr, ssize_t *n, FILE *stream);
 
 int _atoi(char *s);
 int _strlen(char *s);

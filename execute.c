@@ -29,10 +29,10 @@ void execute(char **arr, char **av)
  *
  * Return: number reaeed
  */
-ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
+ssize_t _getline(char **lineptr, ssize_t *n, FILE *stream)
 {
 	ssize_t nread = 0;
-	char *temp;
+	char *temp, *new_buff;
 
 	temp = malloc(BUFFER);
 	if (!temp)
@@ -43,8 +43,7 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 		if (*n < nread + BUFFER)
 		{
 			*n += BUFFER;
-			char *new_buff = _realloc(temp, sizeof(temp), sizeof(temp) + *n);
-
+			new_buff = _realloc(temp, sizeof(temp), sizeof(temp) + *n);
 			if (!new_buff)
 			{
 				free(temp);
