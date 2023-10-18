@@ -1,18 +1,29 @@
-#ifndef __HEADER__
-#define __HEADER__
+#ifndef __HEAD__
+#define __HEAD__
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
-#include <sys/wait.h>
 #include <unistd.h>
+#include <sys/wait.h>
+#include <errno.h>
+#include <stddef.h>
 #include <sys/stat.h>
-extern char **environ;
+#include <limits.h>
+#define BUFFER 1024
 
-char **make_array(char *str, char **array);
-int _strlen(char *str);
-char *_strtok(char *str, char *del);
+
+char **make_array(char *str);
+ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
+
+int _atoi(char *s);
+int _strlen(char *s);
+int _strcmp(char *s1, char *s2);
 char *_strchr(char *s, char c);
-int n_elements(char *str);
+char *my_strtok(char *str, char *delim);
+int _putchar(char c);
+void execute(char **arr, char **av);
 
-int execute(char **cmd);
+void free_grid(int **grid, int height);
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
+
 #endif

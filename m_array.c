@@ -1,113 +1,82 @@
 #include "main.h"
+int n_elements(char *str);
 /**
- * make_array - creates a 2d array
- * @str: string to be modified
+ * make_array - makes a 2d array of a string
+ * @str: an array of chars
  *
- * Return: modified array
+ * Return: a pointer to a 2d array
  */
-char **make_array(char *str, char **array)
+char **make_array(char *str)
 {
+	char **arr;
 	char *token;
-	int i = 0, j;
+	int i = 0;
 
-	token = _strtok(str, " ");
-	array = malloc(sizeof(char *) * n_elements(str));
-	if (array == NULL)
-	{
-		perror(getenv("_"));
-		return(NULL);
-	}
+	arr = malloc(sizeof(char *) * n_elements(str) + 1);
+
+	token = my_strtok(str, " ");
+
 	while (token != NULL)
 	{
-		j = 0;
-		array[i] = malloc(sizeof(char) * (_strlen(token)) + 1);
-		if (array == NULL)
-			return (NULL);
-		while (j < _strlen(token))
-		{
-			array[i][j] = token[j];
-			j++;
-		}
-		array[i][j] = '\0';
-		token = _strtok(NULL, " ");
+		arr[i] = malloc(sizeof(char) * _strlen(token));
+		arr[i] = token;
+
+		token = my_strtok(NULL, " ");
 		i++;
 	}
-	array[i] = NULL;
-	free(token);
-	return (array);
+	arr[i] = NULL;
+
+	return (arr);
+
 }
 /**
- * _strlen - str len
- * @str: string
- * Return : str len
- */
-int _strlen(char *str)
-{
-	int i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
-/**
- * _strtok - the same as strtok
- * @str: str
- * @del: token
- * Return: a string
- */
-char *_strtok(char *str, char *del)
-{
-	static char *pos = NULL;
-	char *end, *start = (str != NULL)? str : pos;
-
-	while (*start && _strchr(del, *start))
-		start++;
-
-	end = start;
-
-	while (*end && !_strchr(del, *end))
-		end++;
-	if (*start == '\0')
-		return (NULL);
-	*end = '\0';
-	pos = end + 1;
-
-	return (start);
-}
-/**
- * _strchr - search for char c in string s
- * @s: pointer to a string
- * @c: a char to be searched for
+ * n_elements - return number of array to be allocated
+ * @str: a string
  *
- * Return: pointer to s or null if c not found
- */
-char *_strchr(char *s, char c)
-{
-	int a;
-
-	for (a = 0; s[a]; a++)
-	{
-		if (s[a] == c)
-			return (s + a);
-	}
-	if (c == '\0')
-		return (s + a);
-
-	return ('\0');
-}
-/**
- * n_elements - number of space + 1
- * @str: string
- *
- * Return: n of elements
+ * Return: number of elements
  */
 int n_elements(char *str)
 {
-	int i = 0, n = 0;
-	while (str[i])
+	int i = 0, j = 0;
+
+	while (str[i] != '\0')
 	{
 		if (str[i] == ' ')
-			n++;
+			j++;
 		i++;
 	}
-	return (n + 1);
+	return (j + 1);
+}
+/**
+ * my_strtok - works as strtok
+ * @str: a string
+ * @delim: delimter
+ *
+ * Return: a tokened string
+ */
+char *my_strtok(char *str, char *delim)
+{
+	static char *ptr;
+	char *nstr;
+
+	if (str == NULL)
+		str = ptr;
+
+	nstr = str;
+
+	if (*nstr == '\n' || *nstr == '\0')
+		return (NULL);
+
+	while (nstr != NULL && _strchr(delim, *nstr) == NULL)
+		nstr++;
+
+	if (nstr != NULL || *nstr != '\n')
+	{
+		*nstr = '\0';
+		ptr = nstr + 1;
+	}
+	else
+		ptr = NULL;
+
+	return (str);
 }

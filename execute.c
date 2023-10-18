@@ -1,26 +1,67 @@
 #include "main.h"
 /**
- * execute - execute a command
- * @cmd: command to be excuted
+ * execute - executes the command
+ * @arr: array of arguments
+ * @av: array of arguments
  *
- * Return: -1 on fail
+ * Return: 1 on succ  -1 on fail
  */
-int execute(char **cmd)
+void execute(char **arr, char **av)
 {
-	int child_pid, status;
-	
-	if (cmd != NULL)
+	int p, status;
+
+	p = fork();
+	if (p == 0)
 	{
-		child_pid = fork();
-		if (child_pid == -1)
-			return (-1);
-		if (child_pid == 0)
+		if (execve(arr[0], arr, NULL) == -1)
 		{
-			if (execve(cmd[0], cmd, environ) == -1)
-				perror(cmd[0]);
+			perror(av[0]);
 			exit(EXIT_FAILURE);
 		}
-		wait(&status);
 	}
-	return (0);
+	wait(&status);
+}
+/**
+ * _getline - read a line from input
+ * @lineptr: a pointer to an array
+ * @n: number
+ * @stream: file stream
+ *
+ * Return: number reaeed
+ */
+ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
+{
+	ssize_t nread = 0;
+	char *temp;
+
+	temp = malloc(BUFFER);
+	if (!temp)
+		return (-1);
+
+	while ((nread += read(fileno(stream), temp + nread, BUFFER)) > 0)
+	{
+		if (*n < nread + BUFFER)
+		{
+			*n += BUFFER;
+			char *new_buff = _realloc(temp, sizeof(temp), sizeof(temp) + *n);
+
+			if (!new_buff)
+			{
+				free(temp);
+				return (-1);
+			}
+			temp = new_buff;
+		}
+		if (temp[nread - 1] == '\n')
+			break;
+	}
+	if (nread == -1)
+	{
+		free(temp);
+		return (-1);
+	}
+	temp[nread - 1] = '\0';
+	*lineptr = temp;
+
+	return (nread - 1);
 }
